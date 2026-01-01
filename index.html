@@ -33,16 +33,8 @@ canvas{
 }
 
 h1{color:#ffd700}
-.year{
-  font-size:48px;
-  color:#ffeb3b;
-  text-shadow:0 0 25px red;
-}
-.name{
-  font-size:22px;
-  color:#00e5ff;
-  margin:8px 0;
-}
+.year{font-size:48px;color:#ffeb3b;text-shadow:0 0 25px red}
+.name{font-size:22px;color:#00e5ff;margin:8px 0}
 p{font-size:15px;line-height:1.6}
 
 input{
@@ -76,61 +68,66 @@ audio{display:none}
 
 <canvas id="fireworks"></canvas>
 
-<!-- MUSIC -->
 <audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/11/22/audio_0f1c5e0f2b.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2022/11/22/audio_0f1c5e0f2b.mp3">
 </audio>
 
-<!-- INPUT -->
+<!-- INPUT BOX (ALWAYS VISIBLE FIRST) -->
 <div class="card" id="inputBox">
-  <h1>🎆 Happy New Year 🎆</h1>
+  <h1> Happy New Year </h1>
   <input type="text" id="username" placeholder="Apna naam likhiye">
-  <input type="file" accept="image/*" onchange="loadPhoto(event)">
-  <button onclick="start()">Create Wish ✨</button>
+  <button onclick="start()">Create Wish </button>
 </div>
 
-<!-- WISH -->
+<!-- WISH BOX -->
 <div class="card" id="wishBox">
   <div class="year">2026</div>
-  <img id="photo">
   <div class="name" id="showName"></div>
   <p>
-    🎉 Vishnupura Boys ki taraf se 🎉<br>
-    Naya saal khushiyan, success aur brotherhood laaye 💪🔥
+     Vishnupura Boys ki taraf se <br>
+    Naya saal khushiyan, success aur brotherhood laaye 
   </p>
-  <button onclick="share()">📤 Share</button>
+  <button onclick="editName()"> Edit Name</button>
+  <button onclick="share()"> Share</button>
 </div>
 
 <script>
-/* URL NAME */
+/* URL NAME CHECK */
 const params=new URLSearchParams(location.search);
 const urlName=params.get("name");
-if(urlName){
-  document.getElementById("inputBox").style.display="none";
-  document.getElementById("wishBox").style.display="block";
-  document.getElementById("showName").innerText="✨ "+decodeURIComponent(urlName)+" ✨";
-  document.getElementById("bgm").play();
-}
 
-/* PHOTO LOAD */
-let uploadedPhoto="";
-function loadPhoto(e){
-  uploadedPhoto=URL.createObjectURL(e.target.files[0]);
+if(urlName){
+  showWish(decodeURIComponent(urlName));
 }
 
 /* START */
 function start(){
   let name=document.getElementById("username").value;
-  if(name===""){alert("Naam likho 😊");return;}
-  location.href=location.pathname+"?name="+encodeURIComponent(name);
+  if(name===""){alert("Naam likho ");return;}
+  showWish(name);
+  history.replaceState(null,"","?name="+encodeURIComponent(name));
+}
+
+/* SHOW WISH */
+function showWish(name){
+  document.getElementById("inputBox").style.display="none";
+  document.getElementById("wishBox").style.display="block";
+  document.getElementById("showName").innerText=" "+name+" ";
+  document.getElementById("bgm").play();
+}
+
+/* EDIT NAME */
+function editName(){
+  document.getElementById("wishBox").style.display="none";
+  document.getElementById("inputBox").style.display="block";
 }
 
 /* SHARE */
 function share(){
-  let name=document.getElementById("showName").innerText.replace("✨","").trim();
+  let name=document.getElementById("showName").innerText.replace(//g,"").trim();
   let link=location.origin+location.pathname+"?name="+encodeURIComponent(name);
-  let text="🎆 Happy New Year 2026 🎆%0A"+name+
-           "%0AVishnupura Boys ki taraf se wishes 🔥%0A👇%0A"+link;
+  let text=" Happy New Year 2026 %0A"+name+
+           "%0AVishnupura Boys ki taraf se wishes %0A%0A"+link;
   window.open("https://wa.me/?text="+text,"_blank");
 }
 
